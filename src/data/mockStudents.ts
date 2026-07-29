@@ -3,9 +3,9 @@ import { Student, SessionAttendance } from '../types';
 export const INITIAL_STUDENTS: Student[] = [
   {
     id: 's-1',
-    name: 'Aina Rasoanaivo',
-    kanjiName: 'アイナ',
-    classGroup: 'Classe N5 - Lundi',
+    name: 'Manana Fidèle Rakotoarisoa',
+    kanjiName: 'マナナ・フィデル',
+    classGroup: 'CJ_MIX',
     presenceRate: 95,
     assiduiteScore: 90,
     jlptTarget: 'N5',

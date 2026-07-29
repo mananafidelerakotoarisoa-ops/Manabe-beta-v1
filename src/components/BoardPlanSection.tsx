@@ -71,8 +71,13 @@ export const BoardPlanSection: React.FC<BoardPlanSectionProps> = ({ boardPlan, o
               className="w-full bg-slate-900 border border-emerald-600 rounded-lg px-3 py-1.5 text-emerald-200 font-bold text-sm focus:outline-none"
             />
           ) : (
-            <div className="text-emerald-200 font-bold text-base sm:text-lg tracking-wide border-b border-emerald-800/60 pb-2">
-              {boardPlan.grammarPattern || 'V-て形 + もいいです'}
+            <div
+              onClick={() => setIsEditing(true)}
+              className="text-emerald-200 font-bold text-base sm:text-lg tracking-wide border-b border-emerald-800/60 pb-2 cursor-pointer hover:text-emerald-100 flex items-center justify-between group"
+              title="Cliquer pour modifier le motif grammatical"
+            >
+              <span>{boardPlan.grammarPattern || 'V-て形 + もいいです'}</span>
+              <Edit2 className="w-3.5 h-3.5 text-emerald-500 opacity-0 group-hover:opacity-100 transition" />
             </div>
           )}
         </div>
@@ -80,9 +85,16 @@ export const BoardPlanSection: React.FC<BoardPlanSectionProps> = ({ boardPlan, o
         {/* Example Sentences */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
           
-          <div className="bg-slate-900/60 border border-emerald-800/40 rounded-lg p-3 space-y-1">
-            <span className="text-[10px] font-mono text-emerald-400 font-semibold block">
-              例文 (Japanese Example)
+          <div
+            onClick={() => !isEditing && setIsEditing(true)}
+            className={`bg-slate-900/60 border border-emerald-800/40 rounded-lg p-3 space-y-1 transition ${
+              !isEditing ? 'cursor-pointer hover:border-emerald-600/60' : ''
+            }`}
+            title={!isEditing ? 'Cliquer pour modifier la phrase exemple' : undefined}
+          >
+            <span className="text-[10px] font-mono text-emerald-400 font-semibold flex items-center justify-between">
+              <span>例文 (Japanese Example)</span>
+              {!isEditing && <Edit2 className="w-3 h-3 text-emerald-500 opacity-60" />}
             </span>
             {isEditing ? (
               <textarea
@@ -98,9 +110,16 @@ export const BoardPlanSection: React.FC<BoardPlanSectionProps> = ({ boardPlan, o
             )}
           </div>
 
-          <div className="bg-slate-900/60 border border-emerald-800/40 rounded-lg p-3 space-y-1">
-            <span className="text-[10px] font-mono text-emerald-400 font-semibold block">
-              意味 (Meaning & English Translation)
+          <div
+            onClick={() => !isEditing && setIsEditing(true)}
+            className={`bg-slate-900/60 border border-emerald-800/40 rounded-lg p-3 space-y-1 transition ${
+              !isEditing ? 'cursor-pointer hover:border-emerald-600/60' : ''
+            }`}
+            title={!isEditing ? 'Cliquer pour modifier la traduction' : undefined}
+          >
+            <span className="text-[10px] font-mono text-emerald-400 font-semibold flex items-center justify-between">
+              <span>意味 (Meaning & English Translation)</span>
+              {!isEditing && <Edit2 className="w-3 h-3 text-emerald-500 opacity-60" />}
             </span>
             {isEditing ? (
               <input

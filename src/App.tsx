@@ -535,6 +535,7 @@ export function App() {
         setTheme={setTheme}
         background={background}
         setBackground={setBackground}
+        students={students}
         onUpdatePlan={(updates) => setPlan({ ...plan, ...updates })}
         onNavigateTab={setActiveTab}
       />

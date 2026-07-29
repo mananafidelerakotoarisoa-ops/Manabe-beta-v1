@@ -210,6 +210,12 @@ export interface AccessibilityAuditResult {
 
 export type VisionFilter = 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia' | 'highContrast';
 
+export interface TeacherScheduleEntry {
+  day: string;
+  classId: string;
+  skills: string[];
+}
+
 export interface Teacher {
   id: 'fidele' | 'haja' | 'rova';
   name: string;
@@ -217,6 +223,7 @@ export interface Teacher {
   email: string;
   role: string;
   classes: string[];
+  scheduleEntries?: TeacherScheduleEntry[];
   avatarLetter: string;
   color: string;
   badgeBg: string;

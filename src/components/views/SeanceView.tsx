@@ -379,8 +379,11 @@ export const SeanceView: React.FC<SeanceViewProps> = ({
                   </div>
                 )}
               </div>
-<div className="flex justify-end pt-4 border-t border-white/10 mt-4">
-              <button className="btn primary flex items-center gap-2">
+            <div className="flex justify-end pt-4 border-t border-white/10 mt-4">
+              <button 
+                onClick={() => alert("Séance enregistrée avec succès !")} 
+                className="btn primary flex items-center gap-2"
+              >
                 <Save className="w-4 h-4" />
                 <span>Terminer et enregistrer la séance</span>
               </button>

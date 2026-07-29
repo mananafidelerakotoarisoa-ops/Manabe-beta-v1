@@ -100,19 +100,50 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
             <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${theme.badgeBg}`}>
               {theme.label}
             </span>
-            <h3 className="text-sm font-bold text-white mt-0.5 flex items-center gap-2">
-              {phase.title}
-            </h3>
+            {isEditing ? (
+              <input
+                type="text"
+                value={phase.title}
+                onChange={(e) => onChange({ ...phase, title: e.target.value })}
+                className="mt-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1 text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-sky-400"
+              />
+            ) : (
+              <h3
+                onClick={() => setIsEditing(true)}
+                className="text-sm font-bold text-white mt-0.5 flex items-center gap-2 cursor-pointer hover:text-sky-300 transition"
+                title="Cliquer pour modifier le titre"
+              >
+                <span>{phase.title}</span>
+                <Edit2 className="w-3 h-3 text-slate-400 opacity-60 hover:opacity-100" />
+              </h3>
+            )}
           </div>
         </div>
 
         {/* Time Allocation & Ergonomic Touch Controls */}
         <div className="flex items-center space-x-2">
           
-          <div className="flex items-center space-x-1.5 bg-slate-900/80 border border-white/15 rounded-lg px-2.5 py-1 text-xs font-semibold text-slate-200">
-            <Clock className="w-3.5 h-3.5 text-sky-400" />
-            <span>{phase.durationMinutes}m</span>
-          </div>
+          {isEditing ? (
+            <div className="flex items-center space-x-1 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs font-semibold text-slate-200">
+              <Clock className="w-3.5 h-3.5 text-sky-400" />
+              <input
+                type="number"
+                value={phase.durationMinutes}
+                onChange={(e) => onChange({ ...phase, durationMinutes: Number(e.target.value) })}
+                className="w-12 bg-transparent text-white font-bold text-xs focus:outline-none"
+              />
+              <span>m</span>
+            </div>
+          ) : (
+            <div
+              onClick={() => setIsEditing(true)}
+              className="flex items-center space-x-1.5 bg-slate-900/80 border border-white/15 rounded-lg px-2.5 py-1 text-xs font-semibold text-slate-200 cursor-pointer hover:border-sky-400/50 transition"
+              title="Cliquer pour modifier la durée"
+            >
+              <Clock className="w-3.5 h-3.5 text-sky-400" />
+              <span>{phase.durationMinutes}m</span>
+            </div>
+          )}
 
           <div className="flex items-center space-x-1">
             {index > 0 && (
@@ -169,8 +200,13 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
               className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:ring-2 focus:ring-sky-400 outline-none"
             />
           ) : (
-            <p className="text-slate-200 bg-slate-900/60 p-3 rounded-xl border border-white/10 leading-relaxed font-medium">
-              {phase.objective}
+            <p
+              onClick={() => setIsEditing(true)}
+              className="text-slate-200 bg-slate-900/60 p-3 rounded-xl border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 leading-relaxed font-medium cursor-pointer transition flex items-center justify-between group"
+              title="Cliquer pour modifier l'objectif"
+            >
+              <span>{phase.objective}</span>
+              <Edit2 className="w-3.5 h-3.5 text-sky-400 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
             </p>
           )}
         </div>
@@ -179,12 +215,19 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           
           {/* Teacher Action (T) */}
-          <div className="p-3.5 bg-emerald-950/30 border border-emerald-500/30 rounded-xl space-y-1.5">
+          <div
+            onClick={() => !isEditing && setIsEditing(true)}
+            className={`p-3.5 bg-emerald-950/30 border border-emerald-500/30 rounded-xl space-y-1.5 transition ${
+              !isEditing ? 'cursor-pointer hover:border-emerald-400/70 hover:bg-emerald-950/40' : ''
+            }`}
+            title={!isEditing ? "Cliquer pour modifier l'action de l'enseignant" : undefined}
+          >
             <div className="font-bold text-emerald-300 flex items-center justify-between text-xs">
               <span className="flex items-center gap-1.5">
                 <span className="w-5 h-5 rounded bg-emerald-600 text-white flex items-center justify-center text-[10px] font-extrabold">T</span>
                 <span>Teacher Action (教師の指示・発話)</span>
               </span>
+              {!isEditing && <Edit2 className="w-3 h-3 text-emerald-400 opacity-60" />}
             </div>
             {isEditing ? (
               <textarea
@@ -201,12 +244,19 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
           </div>
 
           {/* Student Action (S) */}
-          <div className="p-3.5 bg-indigo-950/30 border border-indigo-500/30 rounded-xl space-y-1.5">
+          <div
+            onClick={() => !isEditing && setIsEditing(true)}
+            className={`p-3.5 bg-indigo-950/30 border border-indigo-500/30 rounded-xl space-y-1.5 transition ${
+              !isEditing ? 'cursor-pointer hover:border-indigo-400/70 hover:bg-indigo-950/40' : ''
+            }`}
+            title={!isEditing ? "Cliquer pour modifier l'action des élèves" : undefined}
+          >
             <div className="font-bold text-indigo-300 flex items-center justify-between text-xs">
               <span className="flex items-center gap-1.5">
                 <span className="w-5 h-5 rounded bg-indigo-600 text-white flex items-center justify-center text-[10px] font-extrabold">S</span>
                 <span>Student Action (学習者の活動)</span>
               </span>
+              {!isEditing && <Edit2 className="w-3 h-3 text-indigo-400 opacity-60" />}
             </div>
             {isEditing ? (
               <textarea
@@ -226,10 +276,19 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
 
         {/* Concept Check Questions (CCQs) for Comprehension Phase */}
         {(phase.type === 'comprehension' || (phase.conceptCheckQuestions && phase.conceptCheckQuestions.length > 0)) && (
-          <div className="p-3.5 bg-sky-950/40 border border-sky-500/30 rounded-xl space-y-2">
-            <div className="font-bold text-sky-200 flex items-center gap-1.5 text-xs">
-              <HelpCircle className="w-4 h-4 text-sky-400" />
-              <span>Concept Check Questions (CCQs / 理解チェック質問)</span>
+          <div
+            onClick={() => !isEditing && setIsEditing(true)}
+            className={`p-3.5 bg-sky-950/40 border border-sky-500/30 rounded-xl space-y-2 transition ${
+              !isEditing ? 'cursor-pointer hover:border-sky-400/70 hover:bg-sky-950/50' : ''
+            }`}
+            title={!isEditing ? "Cliquer pour modifier les CCQs" : undefined}
+          >
+            <div className="font-bold text-sky-200 flex items-center justify-between text-xs">
+              <span className="flex items-center gap-1.5">
+                <HelpCircle className="w-4 h-4 text-sky-400" />
+                <span>Concept Check Questions (CCQs / 理解チェック質問)</span>
+              </span>
+              {!isEditing && <Edit2 className="w-3 h-3 text-sky-400 opacity-60" />}
             </div>
 
             <div className="space-y-1.5">
@@ -275,7 +334,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                 {isEditing ? (
                   <textarea rows={2} value={phase.oralIntroScript || ''} onChange={e => onChange({ ...phase, oralIntroScript: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                 ) : (
-                  <p className="text-slate-300 text-xs">{phase.oralIntroScript || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span>{phase.oralIntroScript || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
               <div className="fld">
@@ -283,7 +345,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                 {isEditing ? (
                   <textarea rows={2} value={phase.selfRelevanceNotes || ''} onChange={e => onChange({ ...phase, selfRelevanceNotes: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                 ) : (
-                  <p className="text-slate-300 text-xs">{phase.selfRelevanceNotes || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span>{phase.selfRelevanceNotes || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
               <div className="fld">
@@ -291,7 +356,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                 {isEditing ? (
                   <input type="text" value={phase.formHighlighting || ''} onChange={e => onChange({ ...phase, formHighlighting: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                 ) : (
-                  <p className="text-slate-300 text-xs">{phase.formHighlighting || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span>{phase.formHighlighting || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
               <div className="fld">
@@ -299,7 +367,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                 {isEditing ? (
                   <textarea rows={2} value={phase.interactionPlan || ''} onChange={e => onChange({ ...phase, interactionPlan: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                 ) : (
-                  <p className="text-slate-300 text-xs">{phase.interactionPlan || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span>{phase.interactionPlan || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
             </>
@@ -312,7 +383,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                 {isEditing ? (
                   <textarea rows={2} value={phase.globalSearchActivities || ''} onChange={e => onChange({ ...phase, globalSearchActivities: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                 ) : (
-                  <p className="text-slate-300 text-xs">{phase.globalSearchActivities || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span>{phase.globalSearchActivities || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
               <div className="fld">
@@ -320,7 +394,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                 {isEditing ? (
                   <textarea rows={2} value={phase.listeningActivities || ''} onChange={e => onChange({ ...phase, listeningActivities: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                 ) : (
-                  <p className="text-slate-300 text-xs">{phase.listeningActivities || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span>{phase.listeningActivities || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
               <div className="fld">
@@ -328,7 +405,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                 {isEditing ? (
                   <textarea rows={2} value={phase.anticipatedErrors || ''} onChange={e => onChange({ ...phase, anticipatedErrors: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                 ) : (
-                  <p className="text-slate-300 text-xs">{phase.anticipatedErrors || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span>{phase.anticipatedErrors || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
             </>
@@ -341,7 +421,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                 {isEditing ? (
                   <textarea rows={2} value={phase.structuralExercises || ''} onChange={e => onChange({ ...phase, structuralExercises: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                 ) : (
-                  <p className="text-slate-300 text-xs">{phase.structuralExercises || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span>{phase.structuralExercises || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
               <div className="fld">
@@ -349,7 +432,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                 {isEditing ? (
                   <textarea rows={2} value={phase.oralReading || ''} onChange={e => onChange({ ...phase, oralReading: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                 ) : (
-                  <p className="text-slate-300 text-xs">{phase.oralReading || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span>{phase.oralReading || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
               <div className="fld">
@@ -357,7 +443,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                 {isEditing ? (
                   <textarea rows={2} value={phase.customWriting || ''} onChange={e => onChange({ ...phase, customWriting: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                 ) : (
-                  <p className="text-slate-300 text-xs">{phase.customWriting || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span>{phase.customWriting || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
               <div className="fld">
@@ -365,7 +454,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                 {isEditing ? (
                   <textarea rows={2} value={phase.correctionStrategy || ''} onChange={e => onChange({ ...phase, correctionStrategy: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                 ) : (
-                  <p className="text-slate-300 text-xs">{phase.correctionStrategy || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span>{phase.correctionStrategy || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
             </>
@@ -390,7 +482,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                     <input type="text" placeholder="Description" value={phase.communicativeTaskDesc || ''} onChange={e => onChange({ ...phase, communicativeTaskDesc: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                   </div>
                 ) : (
-                  <p className="text-slate-300 text-xs capitalize">{phase.communicativeTaskType} : {phase.communicativeTaskDesc || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span className="capitalize">{phase.communicativeTaskType} : {phase.communicativeTaskDesc || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
               <div className="fld">
@@ -398,7 +493,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                 {isEditing ? (
                   <textarea rows={2} value={phase.successCriteria || ''} onChange={e => onChange({ ...phase, successCriteria: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                 ) : (
-                  <p className="text-slate-300 text-xs">{phase.successCriteria || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span>{phase.successCriteria || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
               <div className="fld">
@@ -406,7 +504,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                 {isEditing ? (
                   <textarea rows={2} value={phase.activeLearningActivity || ''} onChange={e => onChange({ ...phase, activeLearningActivity: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                 ) : (
-                  <p className="text-slate-300 text-xs">{phase.activeLearningActivity || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span>{phase.activeLearningActivity || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
               <div className="fld">
@@ -414,7 +515,10 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
                 {isEditing ? (
                   <textarea rows={2} value={phase.spiralReusePlan || ''} onChange={e => onChange({ ...phase, spiralReusePlan: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" />
                 ) : (
-                  <p className="text-slate-300 text-xs">{phase.spiralReusePlan || 'Non spécifié'}</p>
+                  <p onClick={() => setIsEditing(true)} className="text-slate-300 text-xs p-2.5 rounded-lg bg-slate-900/50 border border-white/10 hover:border-sky-400/50 hover:bg-slate-900/80 cursor-pointer transition flex items-center justify-between group" title="Cliquer pour modifier">
+                    <span>{phase.spiralReusePlan || 'Non spécifié (Cliquer pour modifier)'}</span>
+                    <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition shrink-0 ml-2" />
+                  </p>
                 )}
               </div>
             </>
@@ -422,10 +526,17 @@ export const PcppPhaseCard: React.FC<PcppPhaseCardProps> = ({
         </div>
 
         {/* Teaching Materials */}
-        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-white/10">
+        <div
+          onClick={() => !isEditing && setIsEditing(true)}
+          className={`flex flex-wrap items-center gap-2 pt-2 border-t border-white/10 transition ${
+            !isEditing ? 'cursor-pointer hover:opacity-90' : ''
+          }`}
+          title={!isEditing ? "Cliquer pour modifier les matériels" : undefined}
+        >
           <span className="font-bold text-slate-400 text-[11px] flex items-center gap-1">
             <Package className="w-3.5 h-3.5 text-slate-400" />
             <span>Materials (教材):</span>
+            {!isEditing && <Edit2 className="w-3 h-3 text-slate-500 opacity-60 ml-1" />}
           </span>
           {phase.materialsNeeded.map((mat, mIdx) => (
             <span key={mIdx} className="px-2.5 py-1 rounded-full bg-slate-900/80 border border-white/15 text-slate-200 font-medium text-[11px] flex items-center gap-1.5">

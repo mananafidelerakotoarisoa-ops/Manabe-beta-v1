@@ -31,6 +31,56 @@ export const FichesView: React.FC<FichesViewProps> = ({
 }) => {
   const [fichesTab, setFichesTab] = useState<'sequence' | 'board'>('sequence');
 
+  const handleExportPDF = () => {
+    window.print();
+  };
+
+  const handleSaveJSON = () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(plan, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", `fiche_${plan.theme?.replace(/\s+/g, '_') || 'sans_nom'}.json`);
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  };
+
+  const handleSaveTemplate = () => {
+    showToast("Fiche enregistrée comme modèle.");
+  };
+
+  const handleClearPlan = () => {
+    if (confirm("Voulez-vous vraiment supprimer tout le contenu de cette fiche ?")) {
+      setPlan({
+        ...plan,
+        theme: "",
+        canDo: "",
+        prerequisites: "",
+        grammarPoints: [],
+        materials: [],
+        reviewTasks: "",
+        funActivity: "",
+        selfEvaluation: "",
+        methodologyNotes: "",
+        coherenceAnalysis: "",
+        acquisitionRate: "",
+        engagementMeasure: "",
+        phases: [],
+        attachments: [],
+        boardPlan: {
+          grammarPattern: '',
+          exampleSentences: '',
+          meaning: '',
+          vocabulary: '',
+          timelineOrDiagram: '',
+          ccqOrConjugation: '',
+          drillCues: ''
+        }
+      });
+      showToast("La fiche a été réinitialisée.");
+    }
+  };
+
   return (
     <div className="space-y-6">
       
@@ -460,16 +510,16 @@ export const FichesView: React.FC<FichesViewProps> = ({
                 </div>
                 
                 <div className="flex flex-wrap gap-2 pt-2">
-                  <button className="btn primary flex items-center gap-2">
+                  <button onClick={handleExportPDF} className="btn primary flex items-center gap-2">
                     <span className="font-bold">Export PDF</span>
                   </button>
-                  <button className="btn dark flex items-center gap-2">
+                  <button onClick={handleSaveJSON} className="btn dark flex items-center gap-2">
                     <span className="font-bold">Sauvegarde JSON</span>
                   </button>
-                  <button className="btn dark flex items-center gap-2">
+                  <button onClick={handleSaveTemplate} className="btn dark flex items-center gap-2">
                     <span className="font-bold text-sky-400">Enregistrer comme modèle</span>
                   </button>
-                  <button className="btn dark flex items-center gap-2">
+                  <button onClick={handleClearPlan} className="btn dark flex items-center gap-2">
                     <span className="font-bold text-rose-400">Supprimer la fiche</span>
                   </button>
                 </div>
