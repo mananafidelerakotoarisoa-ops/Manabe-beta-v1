@@ -1,0 +1,6 @@
+{
+  "name": "Japanese PCPP Lesson Planner",
+  "description": "A fast, lightweight class preparation tool for Japanese teachers using the PCPP method with AI generation, accessibility testing, PDF export, and cloud sync.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
