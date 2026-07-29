@@ -511,20 +511,7 @@ export function App() {
 
       {/* Floating Bottom Navigation Capsule (#nav) with 5 Tabs */}
 
-      {/* Sticky Primary CTA for Mobile */}
-      <div className="fixed bottom-[100px] left-1/2 transform -translate-x-1/2 z-[9998] sm:hidden">
-        <button 
-          onClick={() => {
-            const newPlan = { ...plan, id: 'new-' + Date.now(), title: 'Nouvelle Leçon' };
-            setPlan(newPlan);
-            setActiveTab('fiches');
-          }}
-          className="bg-sky-500 hover:bg-sky-400 text-white font-bold py-3 px-6 rounded-full shadow-lg shadow-sky-500/30 flex items-center gap-2 border border-sky-300/50"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          <span className="text-sm tracking-wide">Nouvelle Fiche</span>
-        </button>
-      </div>
+
 
       <BottomBar
         activeTab={activeTab}
