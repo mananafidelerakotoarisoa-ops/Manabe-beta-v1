@@ -157,20 +157,37 @@ export function App() {
 
 
   const handleExportDrive = async () => {
-    if (!user || !googleToken) {
-      showToast('Erreur: Non connecté ou pas de permissions Google Drive.');
-      return;
+    let currentUser = user;
+    let currentToken = googleToken;
+
+    if (!currentUser || !currentToken) {
+      showToast('Connexion à Google Drive...');
+      try {
+        const authResult = await googleSignIn();
+        if (authResult) {
+          currentUser = authResult.user;
+          currentToken = authResult.accessToken;
+          setUser(currentUser);
+          setGoogleToken(currentToken);
+        } else {
+          showToast('Erreur: Connexion annulée.');
+          return;
+        }
+      } catch (err: any) {
+        showToast('Erreur de connexion Google: ' + err.message);
+        return;
+      }
     }
     
     showToast('Sauvegarde dans Google Drive...');
     try {
-      const idToken = await user.getIdToken();
+      const idToken = await currentUser.getIdToken();
       const response = await fetch('/api/drive/upload', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${idToken}`,
-          'x-goog-token': googleToken
+          'x-goog-token': currentToken
         },
         body: JSON.stringify({
           fileName: `Fiche_PCPP_${plan.title.replace(/\s+/g, '_')}_${Date.now()}.json`,
